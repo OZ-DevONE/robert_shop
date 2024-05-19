@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Profile;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 
 class ProfileController extends Controller {
@@ -13,9 +14,9 @@ class ProfileController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        $profiles = auth()->user()->profiles()->paginate(4);
+        $profiles = auth()->user()->profiles()->with('supplier')->paginate(4);
         return view('user.profile.index', compact('profiles'));
-    }
+    }    
 
     /**
      * Возвращает данные профиля в формате JSON
@@ -34,7 +35,8 @@ class ProfileController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        return view('user.profile.create');
+        $suppliers = Supplier::all();
+        return view('user.profile.create', compact('suppliers'));
     }
 
     /**
@@ -70,8 +72,9 @@ class ProfileController extends Controller {
         if ($profile->user_id !== auth()->user()->id) {
             abort(404); // это чужой профиль
         }
+        $profile->load('supplier'); // Загрузка связанного поставщика
         return view('user.profile.show', compact('profile'));
-    }
+    }    
 
     /**
      * Показывает форму для редактирования профиля
@@ -83,7 +86,8 @@ class ProfileController extends Controller {
         if ($profile->user_id !== auth()->user()->id) {
             abort(404); // это чужой профиль
         }
-        return view('user.profile.edit', compact('profile'));
+        $suppliers = Supplier::all();
+        return view('user.profile.edit', compact('profile', 'suppliers'));
     }
 
     /**

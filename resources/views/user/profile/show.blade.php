@@ -14,6 +14,7 @@
     @isset ($profile->comment)
         <p><strong>Комментарий:</strong> {{ $profile->comment }}</p>
     @endisset
+    <p><strong>Поставщик услуг:</strong> {{ $profile->supplier->name ?? 'Не указан' }}</p>
 
     <a href="{{ route('user.profile.edit', ['profile' => $profile->id]) }}"
        class="btn btn-success">

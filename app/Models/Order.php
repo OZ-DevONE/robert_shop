@@ -8,6 +8,7 @@ use Illuminate\Support\Carbon;
 class Order extends Model {
     protected $fillable = [
         'user_id',
+        'supplier_id',
         'name',
         'email',
         'phone',
@@ -61,5 +62,14 @@ class Order extends Model {
      */
     public function user() {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Связь «заказ принадлежит» таблицы `orders` с таблицей `suppliers`
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function supplier() {
+        return $this->belongsTo(Supplier::class);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Basket;
 use App\Models\Order;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 
 class BasketController extends Controller {
@@ -32,18 +33,18 @@ class BasketController extends Controller {
     public function checkout(Request $request) {
         $profile = null;
         $profiles = null;
-        if (auth()->check()) { // если пользователь аутентифицирован
+        $suppliers = Supplier::all();
+        if (auth()->check()) {
             $user = auth()->user();
-            // ...и у него есть профили для оформления
             $profiles = $user->profiles;
-            // ...и был запрошен профиль для оформления
             $prof_id = (int)$request->input('profile_id');
             if ($prof_id) {
                 $profile = $user->profiles()->whereIdAndUserId($prof_id, $user->id)->first();
             }
         }
-        return view('basket.checkout', compact('profiles', 'profile'));
+        return view('basket.checkout', compact('profiles', 'profile', 'suppliers'));
     }
+    
 
     /**
      * Возвращает профиль пользователя в формате JSON
@@ -79,14 +80,15 @@ class BasketController extends Controller {
             'email' => 'required|email|max:255',
             'phone' => 'required|max:255',
             'address' => 'required|max:255',
+            'supplier_id' => 'required|exists:suppliers,id',
         ]);
-
+    
         // валидация пройдена, сохраняем заказ
         $user_id = auth()->check() ? auth()->user()->id : null;
         $order = Order::create(
             $request->all() + ['amount' => $this->basket->getAmount(), 'user_id' => $user_id]
         );
-
+    
         foreach ($this->basket->products as $product) {
             $order->items()->create([
                 'product_id' => $product->id,
@@ -96,14 +98,14 @@ class BasketController extends Controller {
                 'cost' => $product->price * $product->pivot->quantity,
             ]);
         }
-
+    
         // очищаем корзину
         $this->basket->clear();
-
+    
         return redirect()
             ->route('basket.success')
             ->with('order_id', $order->id);
-    }
+    }    
 
     /**
      * Сообщение об успешном оформлении заказа

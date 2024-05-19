@@ -13,9 +13,9 @@ class OrderController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        $orders = Order::orderBy('created_at', 'desc')->paginate(5);
+        $orders = Order::with('supplier')->orderBy('created_at', 'desc')->paginate(5);
         $statuses = Order::STATUSES;
-        return view('admin.order.index',compact('orders', 'statuses'));
+        return view('admin.order.index', compact('orders', 'statuses'));
     }
 
     /**
@@ -25,6 +25,7 @@ class OrderController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function show(Order $order) {
+        $order->load('supplier'); // Загрузка связанного поставщика
         $statuses = Order::STATUSES;
         return view('admin.order.show', compact('order', 'statuses'));
     }
@@ -37,6 +38,7 @@ class OrderController extends Controller {
      */
     public function edit(Order $order) {
         $statuses = Order::STATUSES;
+        $order->load('supplier'); // Загрузка связанного поставщика
         return view('admin.order.edit', compact('order', 'statuses'));
     }
 

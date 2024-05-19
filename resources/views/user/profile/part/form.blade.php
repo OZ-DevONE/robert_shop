@@ -25,5 +25,16 @@
               maxlength="255" rows="2">{{ old('comment') ?? $profile->comment ?? '' }}</textarea>
 </div>
 <div class="form-group">
+    <label for="supplier_id">Выберите поставщика:</label>
+    <select class="form-control" id="supplier_id" name="supplier_id" required>
+        @foreach ($suppliers as $supplier)
+            <option value="{{ $supplier->id }}" 
+                {{ (old('supplier_id') ?? $profile->supplier_id ?? '') == $supplier->id ? 'selected' : '' }}>
+                {{ $supplier->name }}
+            </option>
+        @endforeach
+    </select>
+</div>
+<div class="form-group">
     <button type="submit" class="btn btn-success">Сохранить</button>
 </div>

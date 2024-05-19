@@ -11,10 +11,11 @@
         <table class="table table-bordered">
             <tr>
                 <th>№</th>
-                <th width="22%">Наименование</th>
-                <th width="22%">Имя, Фамилия</th>
-                <th width="22%">Адрес почты</th>
-                <th width="22%">Номер телефона</th>
+                <th width="18%">Наименование</th>
+                <th width="18%">Имя, Фамилия</th>
+                <th width="18%">Адрес почты</th>
+                <th width="18%">Номер телефона</th>
+                <th width="18%">Поставщик услуг</th>
                 <th><i class="fas fa-edit"></i></th>
                 <th><i class="fas fa-trash-alt"></i></th>
             </tr>
@@ -29,6 +30,7 @@
                     <td>{{ $profile->name }}</td>
                     <td><a href="mailto:{{ $profile->email }}">{{ $profile->email }}</a></td>
                     <td>{{ $profile->phone }}</td>
+                    <td>{{ $profile->supplier->name ?? 'Не указан' }}</td>
                     <td>
                         <a href="{{ route('user.profile.edit', ['profile' => $profile->id]) }}">
                             <i class="far fa-edit"></i>

@@ -6,12 +6,13 @@
     <table class="table table-bordered">
         <tr>
             <th>№</th>
-            <th width="18%">Дата и время</th>
+            <th width="12%">Дата и время</th>
             <th width="5%">Статус</th>
-            <th width="18%">Покупатель</th>
-            <th width="18%">Адрес почты</th>
-            <th width="18%">Номер телефона</th>
-            <th width="18%">Пользователь</th>
+            <th width="12%">Покупатель</th>
+            <th width="12%">Адрес почты</th>
+            <th width="12%">Номер телефона</th>
+            <th width="12%">Пользователь</th>
+            <th width="12%">Поставщик услуг</th>
             <th><i class="fas fa-eye"></i></th>
             <th><i class="fas fa-edit"></i></th>
         </tr>
@@ -22,7 +23,7 @@
                 <td>
                     @if ($order->status == 0)
                         <span class="text-danger">{{ $statuses[$order->status] }}</span>
-                    @elseif (in_array($order->status, [1,2,3]))
+                    @elseif (in_array($order->status, [1, 2, 3]))
                         <span class="text-success">{{ $statuses[$order->status] }}</span>
                     @else
                         {{ $statuses[$order->status] }}
@@ -36,6 +37,7 @@
                         {{ $order->user->name }}
                     @endisset
                 </td>
+                <td>{{ $order->supplier->name ?? 'Не указан' }}</td>
                 <td>
                     <a href="{{ route('admin.order.show', ['order' => $order->id]) }}">
                         <i class="far fa-eye"></i>

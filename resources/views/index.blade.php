@@ -3,11 +3,10 @@
 @section('content')
     <h1>Интернет-магазин</h1>
     <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto autem distinctio
-        dolorum ducimus earum eligendi est eum eveniet excepturi exercitationem explicabo facilis
-        fuga hic illum ipsam libero modi, nobis odio, officia officiis optio quae quibusdam
-        reiciendis repellendus sed sunt tenetur, voluptatum. Ab adipisci aperiam esse iure neque
-        quis repellendus temporibus.
+        Добро пожаловать в наш интернет-магазин, где мы предлагаем широкий ассортимент брендовых вещей. 
+        Наша коллекция включает в себя самые актуальные и модные товары от известных мировых брендов. 
+        Мы гарантируем качество и подлинность каждого товара, представленного на нашем сайте. 
+        У нас вы найдете одежду, обувь, аксессуары и многое другое, что поможет вам подчеркнуть ваш уникальный стиль.
     </p>
 
     @if($new->count())

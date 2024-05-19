@@ -20,12 +20,19 @@ class CreateProfilesTable extends Migration {
             $table->string('phone')->nullable(false); // телефон пользователя
             $table->string('address')->nullable(false); // адрес доставки заказа
             $table->string('comment')->nullable(); // комментарий к заказу
+            $table->bigInteger('supplier_id')->unsigned(); // поставщик доставки
             $table->timestamps();
 
             // внешний ключ, ссылается на поле id таблицы users
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
+                ->cascadeOnDelete();
+
+            // внешний ключ, ссылается на поле id таблицы suppliers
+            $table->foreign('supplier_id')
+                ->references('id')
+                ->on('suppliers')
                 ->cascadeOnDelete();
         });
     }

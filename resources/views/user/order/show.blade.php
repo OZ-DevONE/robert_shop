@@ -37,6 +37,5 @@
     @isset ($order->comment)
         <p>Комментарий: {{ $order->comment }}</p>
     @endisset
+    <p>Поставщик услуг: {{ $order->supplier->name ?? 'Не указан' }}</p>
 @endsection
-
-

@@ -7,7 +7,7 @@
         Статус заказа:
         @if ($order->status == 0)
             <span class="text-danger">{{ $statuses[$order->status] }}</span>
-        @elseif (in_array($order->status, [1,2,3]))
+        @elseif (in_array($order->status, [1, 2, 3]))
             <span class="text-success">{{ $statuses[$order->status] }}</span>
         @else
             {{ $statuses[$order->status] }}
@@ -46,5 +46,5 @@
     @isset ($order->comment)
         <p>Комментарий: {{ $order->comment }}</p>
     @endisset
+    <p>Поставщик услуг: {{ $order->supplier->name ?? 'Не указан' }}</p>
 @endsection
-
