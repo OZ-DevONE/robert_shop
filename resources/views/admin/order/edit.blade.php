@@ -7,13 +7,17 @@
         @method('PUT')
         <div class="form-group">
             @php($status = old('status') ?? $order->status ?? 0)
-            <select name="status" class="form-control" title="Статус заказа">
+            <select name="status" class="form-control" title="Статус заказа" id="status-select">
             @foreach ($statuses as $key => $value)
                 <option value="{{ $key }}" @if ($key == $status) selected @endif>
                     {{ $value }}
                 </option>
             @endforeach
             </select>
+        </div>
+        <div class="form-group" id="tracker-number-group" style="display: none;">
+            <input type="text" class="form-control" name="tracker_number" placeholder="Номер трекера"
+                   maxlength="255" value="{{ old('tracker_number') ?? $order->tracker_number ?? '' }}">
         </div>
         <div class="form-group">
             <input type="text" class="form-control" name="name" placeholder="Имя, Фамилия"
@@ -50,4 +54,22 @@
             <button type="submit" class="btn btn-success">Сохранить</button>
         </div>
     </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusSelect = document.getElementById('status-select');
+            const trackerNumberGroup = document.getElementById('tracker-number-group');
+
+            function toggleTrackerNumber() {
+                if (statusSelect.value == 4) {
+                    trackerNumberGroup.style.display = 'block';
+                } else {
+                    trackerNumberGroup.style.display = 'none';
+                }
+            }
+
+            statusSelect.addEventListener('change', toggleTrackerNumber);
+            toggleTrackerNumber();
+        });
+    </script>
 @endsection

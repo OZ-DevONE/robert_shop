@@ -11,6 +11,7 @@
             <th width="19%">Покупатель</th>
             <th width="24%">Адрес почты</th>
             <th width="22%">Номер телефона</th>
+            <th width="19%">Трекер</th> <!-- Новый столбец для трекера -->
             <th width="2%"><i class="fas fa-eye"></i></th>
         </tr>
         @foreach($orders as $order)
@@ -21,6 +22,7 @@
                 <td>{{ $order->name }}</td>
                 <td><a href="mailto:{{ $order->email }}">{{ $order->email }}</a></td>
                 <td>{{ $order->phone }}</td>
+                <td>{{ $order->status == 4 ? $order->tracker_number : '---' }}</td> <!-- Отображение трекера -->
                 <td>
                     <a href="{{ route('user.order.show', ['order' => $order->id]) }}">
                         <i class="fas fa-eye"></i>

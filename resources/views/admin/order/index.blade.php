@@ -3,6 +3,12 @@
 @section('content')
     <h1>Все заказы</h1>
 
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <table class="table table-bordered">
         <tr>
             <th>№</th>
@@ -44,9 +50,13 @@
                     </a>
                 </td>
                 <td>
-                    <a href="{{ route('admin.order.edit', ['order' => $order->id]) }}">
-                        <i class="far fa-edit"></i>
-                    </a>
+                    @if ($order->status != 4)
+                        <a href="{{ route('admin.order.edit', ['order' => $order->id]) }}">
+                            <i class="far fa-edit"></i>
+                        </a>
+                    @else
+                        <i class="far fa-edit text-muted"></i>
+                    @endif
                 </td>
             </tr>
         @endforeach

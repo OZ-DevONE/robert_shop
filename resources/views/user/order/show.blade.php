@@ -38,4 +38,7 @@
         <p>Комментарий: {{ $order->comment }}</p>
     @endisset
     <p>Поставщик услуг: {{ $order->supplier->name ?? 'Не указан' }}</p>
+    @if ($order->status == 4)
+        <p>Номер трекера: {{ $order->tracker_number ?? 'Не указан' }}</p>
+    @endif
 @endsection
