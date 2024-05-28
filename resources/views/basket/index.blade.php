@@ -15,6 +15,7 @@
                 <th>Наименование</th>
                 <th>Цена</th>
                 <th>Кол-во</th>
+                <th>Доступные размеры</th>
                 <th>Стоимость</th>
                 <th></th>
             </tr>
@@ -45,6 +46,17 @@
                         </form>
                     </td>
                     <td>
+                        @if($product->sizes->isNotEmpty())
+                            <ul class="list-unstyled">
+                                @foreach($product->sizes as $size)
+                                    <li>{{ $size->name }}</li>
+                                @endforeach
+                            </ul>
+                        @else
+                            Не указано
+                        @endif
+                    </td>
+                    <td>
                         {{ number_format($product->price * $product->pivot->quantity, 2, '.', '') }}
                     </td>
                     <td>
@@ -59,9 +71,8 @@
                 </tr>
             @endforeach
             <tr>
-                <th colspan="4" class="text-right">Итого</th>
+                <th colspan="6" class="text-right">Итого</th>
                 <th>{{ number_format($amount, 2, '.', '') }}</th>
-                <th></th>
             </tr>
         </table>
         <a href="{{ route('basket.checkout') }}" class="btn btn-success float-right">

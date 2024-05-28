@@ -19,7 +19,7 @@ class BasketController extends Controller {
      * Показывает корзину покупателя
      */
     public function index() {
-        $products = $this->basket->products;
+        $products = $this->basket->products()->with('sizes')->get();
         $amount = $this->basket->getAmount();
         return view('basket.index', compact('products', 'amount'));
     }
@@ -34,7 +34,7 @@ class BasketController extends Controller {
         $profile = null;
         $profiles = null;
         $suppliers = Supplier::all();
-        $products = $this->basket->products;
+        $products = $this->basket->products()->with('sizes')->get();
     
         if (auth()->check()) {
             $user = auth()->user();
@@ -48,8 +48,6 @@ class BasketController extends Controller {
         return view('basket.checkout', compact('profiles', 'profile', 'suppliers', 'products'));
     }
     
-    
-
     /**
      * Возвращает профиль пользователя в формате JSON
      *

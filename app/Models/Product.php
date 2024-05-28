@@ -132,8 +132,7 @@ class Product extends Model {
     }
 
     // Для связи с таблицей размеров
-    public function sizes()
-    {
-        return $this->belongsToMany(Size::class);
-    }
+    public function sizes() {
+        return $this->belongsToMany(Size::class, 'product_size');
+    }    
 }

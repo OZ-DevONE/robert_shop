@@ -41,6 +41,17 @@
                                 Добавить в корзину
                             </button>
                         </form>
+                        <!-- Отображение списка размеров -->
+                        @if($product->sizes->isNotEmpty())
+                            <div class="mt-3">
+                                <h5>Доступные размеры:</h5>
+                                <ul>
+                                    @foreach($product->sizes as $size)
+                                        <li>{{ $size->name }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                     </div>
                 </div>
                 <div class="row">
@@ -73,4 +84,3 @@
     </div>
 </div>
 @endsection
-
