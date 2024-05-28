@@ -16,8 +16,9 @@
     </a>
     <table class="table table-bordered">
         <tr>
-            <th width="30%">Наименование</th>
-            <th width="65%">Описание</th>
+            <th width="20%">Наименование</th>
+            <th width="40%">Описание</th>
+            <th width="20%">Размеры</th>
             <th><i class="fas fa-edit"></i></th>
             <th><i class="fas fa-trash-alt"></i></th>
         </tr>
@@ -29,6 +30,17 @@
                 </a>
             </td>
             <td>{{ iconv_substr($product->content, 0, 150) }}</td>
+            <td>
+                @if($product->sizes->isNotEmpty())
+                    <ul>
+                        @foreach($product->sizes as $size)
+                            <li>{{ $size->name }}</li>
+                        @endforeach
+                    </ul>
+                @else
+                    <p>Размеры не указаны</p>
+                @endif
+            </td>
             <td>
                 <a href="{{ route('admin.product.edit', ['product' => $product->id]) }}">
                     <i class="far fa-edit"></i>

@@ -10,12 +10,17 @@ class OrderItem extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'order_id',
         'product_id',
         'name',
         'price',
         'quantity',
         'cost',
     ];
+
+    public function sizes() {
+        return $this->belongsToMany(Size::class, 'order_item_size');
+    }
 
     /**
      * Связь «элемент принадлежит» таблицы `order_item` с таблицей `products`

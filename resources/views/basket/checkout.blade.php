@@ -7,14 +7,17 @@
     @endif
     <form method="post" action="{{ route('basket.saveorder') }}" id="checkout">
         @csrf
-        <div class="form-group">
+        @php
+            $user = auth()->user();
+        @endphp
+        {{-- <div class="form-group">
             <input type="text" class="form-control" name="name" placeholder="Имя, Фамилия"
-                   required maxlength="255" value="{{ old('name') ?? $profile->name ?? '' }}">
+                   required maxlength="255" value="{{ old('name') ?? $user->name ?? '' }}">
         </div>
         <div class="form-group">
             <input type="email" class="form-control" name="email" placeholder="Адрес почты"
-                   required maxlength="255" value="{{ old('email') ?? $profile->email ?? '' }}">
-        </div>
+                   required maxlength="255" value="{{ old('email') ?? $user->email ?? '' }}">
+        </div> --}}
         <div class="form-group">
             <input type="text" class="form-control" name="phone" placeholder="Номер телефона"
                    required maxlength="255" value="{{ old('phone') ?? $profile->phone ?? '' }}">
@@ -38,6 +41,20 @@
                 @endforeach
             </select>
         </div>
+        <h2 class="mb-4">Товары в корзине</h2>
+        @foreach($products as $product)
+            <div class="form-group">
+                <label for="sizes_{{ $product->id }}">Выберите размер для {{ $product->name }}:</label>
+                <select class="form-control" id="sizes_{{ $product->id }}" name="sizes[{{ $product->id }}]">
+                    <option value="">Уточнить при заказе</option>
+                    @foreach($product->sizes as $size)
+                        <option value="{{ $size->id }}" {{ old('sizes.' . $product->id) == $size->id ? 'selected' : '' }}>
+                            {{ $size->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+        @endforeach
         <div class="form-group">
             <button type="submit" class="btn btn-success">Оформить</button>
         </div>

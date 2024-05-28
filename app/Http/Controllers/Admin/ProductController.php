@@ -8,6 +8,7 @@ use App\Http\Requests\ProductCatalogRequest;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Size;
 
 class ProductController extends Controller {
 
@@ -46,9 +47,11 @@ class ProductController extends Controller {
     public function create() {
         // все категории для возможности выбора родителя
         $items = Category::all();
-        // все бренды для возмозжности выбора подходящего
+        // все бренды для возможности выбора подходящего
         $brands = Brand::all();
-        return view('admin.product.create', compact('items', 'brands'));
+        // все размеры для возможности выбора
+        $sizes = Size::all();
+        return view('admin.product.create', compact('items', 'brands', 'sizes'));
     }
 
     /**
@@ -90,9 +93,11 @@ class ProductController extends Controller {
     public function edit(Product $product) {
         // все категории для возможности выбора родителя
         $items = Category::all();
-        // все бренды для возмозжности выбора подходящего
+        // все бренды для возможности выбора подходящего
         $brands = Brand::all();
-        return view('admin.product.edit', compact('product', 'items', 'brands'));
+        // все размеры для возможности выбора
+        $sizes = Size::all();
+        return view('admin.product.edit', compact('product', 'items', 'brands', 'sizes'));
     }
 
     /**
@@ -111,6 +116,12 @@ class ProductController extends Controller {
         $data = $request->all();
         $data['image'] = $this->imageSaver->upload($request, $product, 'product');
         $product->update($data);
+
+        // Сохраняем размеры
+        if ($request->has('sizes')) {
+            $product->sizes()->sync($request->sizes);
+        }
+
         return redirect()
             ->route('admin.product.show', ['product' => $product->id])
             ->with('success', 'Товар был успешно обновлен');

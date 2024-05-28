@@ -11,6 +11,17 @@
             <p><strong>Новинка:</strong> @if($product->new) да @else нет @endif</p>
             <p><strong>Лидер продаж:</strong> @if($product->hit) да @else нет @endif</p>
             <p><strong>Распродажа:</strong> @if($product->sale) да @else нет @endif</p>
+            <p><strong>Размеры:</strong>
+                @if($product->sizes->isNotEmpty())
+                    <ul>
+                        @foreach($product->sizes as $size)
+                            <li>{{ $size->name }}</li>
+                        @endforeach
+                    </ul>
+                @else
+                    <p>Размеры не указаны</p>
+                @endif
+            </p>
         </div>
         <div class="col-md-6">
             @php

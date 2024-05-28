@@ -5,12 +5,10 @@
            required maxlength="255" value="{{ old('title') ?? $profile->title ?? '' }}">
 </div>
 <div class="form-group">
-    <input type="text" class="form-control" name="name" placeholder="Имя, Фамилия"
-           required maxlength="255" value="{{ old('name') ?? $profile->name ?? '' }}">
+    <input type="hidden" name="name" value="{{ auth()->user()->name }}">
 </div>
 <div class="form-group">
-    <input type="email" class="form-control" name="email" placeholder="Адрес почты"
-           required maxlength="255" value="{{ old('email') ?? $profile->email ?? '' }}">
+    <input type="hidden" name="email" value="{{ auth()->user()->email }}">
 </div>
 <div class="form-group">
     <input type="text" class="form-control" name="phone" placeholder="Номер телефона"

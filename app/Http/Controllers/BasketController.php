@@ -34,6 +34,8 @@ class BasketController extends Controller {
         $profile = null;
         $profiles = null;
         $suppliers = Supplier::all();
+        $products = $this->basket->products;
+    
         if (auth()->check()) {
             $user = auth()->user();
             $profiles = $user->profiles;
@@ -42,8 +44,10 @@ class BasketController extends Controller {
                 $profile = $user->profiles()->whereIdAndUserId($prof_id, $user->id)->first();
             }
         }
-        return view('basket.checkout', compact('profiles', 'profile', 'suppliers'));
+    
+        return view('basket.checkout', compact('profiles', 'profile', 'suppliers', 'products'));
     }
+    
     
 
     /**
@@ -74,38 +78,53 @@ class BasketController extends Controller {
      * Сохранение заказа в БД
      */
     public function saveOrder(Request $request) {
-        // проверяем данные формы оформления
+        // Получаем текущего пользователя
+        $user = auth()->user();
+        
+        // Проверяем данные формы оформления
         $this->validate($request, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255',
             'phone' => 'required|max:255',
             'address' => 'required|max:255',
             'supplier_id' => 'required|exists:suppliers,id',
         ]);
-    
-        // валидация пройдена, сохраняем заказ
-        $user_id = auth()->check() ? auth()->user()->id : null;
+        
+        // Собираем данные для создания заказа
+        $orderData = $request->all();
+        if ($user) {
+            $orderData['name'] = $user->name;
+            $orderData['email'] = $user->email;
+            $orderData['user_id'] = $user->id;
+        }
+        
+        // Создаем заказ
         $order = Order::create(
-            $request->all() + ['amount' => $this->basket->getAmount(), 'user_id' => $user_id]
+            $orderData + ['amount' => $this->basket->getAmount()]
         );
-    
+        
+        // Добавляем продукты в заказ
         foreach ($this->basket->products as $product) {
-            $order->items()->create([
+            $sizeId = $request->input('sizes.' . $product->id);
+            $orderItem = $order->items()->create([
                 'product_id' => $product->id,
                 'name' => $product->name,
                 'price' => $product->price,
                 'quantity' => $product->pivot->quantity,
                 'cost' => $product->price * $product->pivot->quantity,
             ]);
+            
+            // Если размер был выбран, сохраняем его в связи между order_items и sizes
+            if ($sizeId) {
+                $orderItem->sizes()->attach($sizeId);
+            }
         }
-    
-        // очищаем корзину
+        
+        // Очищаем корзину
         $this->basket->clear();
-    
+        
         return redirect()
             ->route('basket.success')
             ->with('order_id', $order->id);
-    }    
+    }        
 
     /**
      * Сообщение об успешном оформлении заказа

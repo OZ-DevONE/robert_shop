@@ -9,6 +9,28 @@
         </div>
     @endif
 
+    <form method="GET" action="{{ route('admin.order.index') }}" class="form-inline mb-3">
+        <div class="form-group mr-3">
+            <label for="status">Фильтр по статусу:</label>
+            <select class="form-control ml-2" id="status" name="status">
+                <option value="">Все</option>
+                @foreach ($statuses as $key => $value)
+                    <option value="{{ $key }}" {{ isset($currentStatus) && $currentStatus == $key ? 'selected' : '' }}>
+                        {{ $value }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+        <div class="form-group mr-3">
+            <label for="sort">Сортировать по дате:</label>
+            <select class="form-control ml-2" id="sort" name="sort">
+                <option value="newest" {{ isset($currentSort) && $currentSort == 'newest' ? 'selected' : '' }}>От новых к старым</option>
+                <option value="oldest" {{ isset($currentSort) && $currentSort == 'oldest' ? 'selected' : '' }}>От старых к новым</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Применить</button>
+    </form>
+
     <table class="table table-bordered">
         <tr>
             <th>№</th>

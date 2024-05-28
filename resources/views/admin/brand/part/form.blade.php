@@ -1,18 +1,22 @@
 @csrf
 <div class="form-group">
-    <input type="text" class="form-control" name="name" placeholder="Наименование"
+    <label for="name">Наименование</label>
+    <input type="text" class="form-control" name="name" id="name" placeholder="Введите наименование"
            required maxlength="100" value="{{ old('name') ?? $brand->name ?? '' }}">
 </div>
 <div class="form-group">
-    <input type="text" class="form-control" name="slug" placeholder="ЧПУ (на англ.)"
+    <label for="slug">ЧПУ (на англ.)</label>
+    <input type="text" class="form-control" name="slug" id="slug" placeholder="Введите ЧПУ (на англ.)"
            required maxlength="100" value="{{ old('slug') ?? $brand->slug ?? '' }}">
 </div>
 <div class="form-group">
-    <textarea class="form-control" name="content" placeholder="Краткое описание" maxlength="200"
+    <label for="content">Краткое описание</label>
+    <textarea class="form-control" name="content" id="content" placeholder="Введите краткое описание" maxlength="200"
               rows="3">{{ old('content') ?? $brand->content ?? '' }}</textarea>
 </div>
 <div class="form-group">
-    <input type="file" class="form-control-file" name="image" accept="image/png, image/jpeg">
+    <label for="image">Изображение</label>
+    <input type="file" class="form-control-file" name="image" id="image" accept="image/png, image/jpeg">
 </div>
 @isset($brand->image)
     <div class="form-group form-check">

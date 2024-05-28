@@ -19,6 +19,7 @@
         <tr>
             <th>№</th>
             <th>Наименование</th>
+            <th>Размер</th> <!-- Новый столбец для размеров -->
             <th>Цена</th>
             <th>Кол-во</th>
             <th>Стоимость</th>
@@ -27,13 +28,22 @@
             <tr>
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ $item->name }}</td>
+                <td>
+                    @if($item->sizes->isNotEmpty())
+                        @foreach($item->sizes as $size)
+                            {{ $size->name }}@if(!$loop->last), @endif
+                        @endforeach
+                    @else
+                        Не указан
+                    @endif
+                </td>
                 <td>{{ number_format($item->price, 2, '.', '') }}</td>
                 <td>{{ $item->quantity }}</td>
                 <td>{{ number_format($item->cost, 2, '.', '') }}</td>
             </tr>
         @endforeach
         <tr>
-            <th colspan="4" class="text-right">Итого</th>
+            <th colspan="5" class="text-right">Итого</th>
             <th>{{ number_format($order->amount, 2, '.', '') }}</th>
         </tr>
     </table>

@@ -10,7 +10,7 @@
             <th width="25%">Имя, фамилия</th>
             <th width="25%">Адрес почты</th>
             <th width="20%">Кол-во заказов</th>
-            <th><i class="fas fa-edit"></i></th>
+            {{-- <th><i class="fas fa-edit"></i></th> --}}
         </tr>
         @foreach($users as $user)
             <tr>
@@ -19,11 +19,11 @@
                 <td>{{ $user->name }}</td>
                 <td><a href="mailto:{{ $user->email }}">{{ $user->email }}</a></td>
                 <td>{{ $user->orders->count() }}</td>
-                <td>
+                {{-- <td>
                     <a href="{{ route('admin.user.edit', ['user' => $user->id]) }}">
                         <i class="far fa-edit"></i>
                     </a>
-                </td>
+                </td> --}}
             </tr>
         @endforeach
     </table>

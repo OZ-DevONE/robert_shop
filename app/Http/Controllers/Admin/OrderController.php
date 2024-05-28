@@ -13,11 +13,30 @@ class OrderController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
-        $orders = Order::with('supplier')->orderBy('created_at', 'desc')->paginate(5);
+    public function index(Request $request) {
+        $query = Order::with(['supplier', 'items.sizes']);
+    
+        // Фильтрация по статусу
+        if ($request->has('status') && is_numeric($request->status)) {
+            $query->where('status', $request->status);
+        }
+    
+        // Сортировка по дате
+        if ($request->has('sort')) {
+            $sort = $request->sort == 'oldest' ? 'asc' : 'desc';
+            $query->orderBy('created_at', $sort);
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+    
+        $orders = $query->paginate(5);
         $statuses = Order::STATUSES;
-        return view('admin.order.index', compact('orders', 'statuses'));
+        $currentStatus = $request->status;
+        $currentSort = $request->sort;
+    
+        return view('admin.order.index', compact('orders', 'statuses', 'currentStatus', 'currentSort'));
     }
+    
 
     /**
      * Просмотр отдельного заказа
@@ -26,7 +45,7 @@ class OrderController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function show(Order $order) {
-        $order->load('supplier'); // Загрузка связанного поставщика
+        $order->load(['supplier', 'items.sizes']); // Загрузка связанного поставщика и размеров товаров
         $statuses = Order::STATUSES;
         return view('admin.order.show', compact('order', 'statuses'));
     }
@@ -45,9 +64,9 @@ class OrderController extends Controller {
         }
     
         $statuses = Order::STATUSES;
-        $order->load('supplier'); // Загрузка связанного поставщика
+        $order->load(['supplier', 'items.sizes']); // Загрузка связанного поставщика и размеров товаров
         return view('admin.order.edit', compact('order', 'statuses'));
-    }
+    }    
     
 
     /**
@@ -80,6 +99,12 @@ class OrderController extends Controller {
     
         $order->update($request->all());
     
+        // Обновление размеров товаров в заказе
+        foreach ($order->items as $item) {
+            $sizeId = $request->input('sizes.' . $item->id);
+            $item->sizes()->sync($sizeId ? [$sizeId] : []);
+        }
+    
         if ($request->input('status') == 4) {
             // Отправка уведомления пользователю
             $order->user->notify(new OrderShipped($order));
@@ -88,6 +113,5 @@ class OrderController extends Controller {
         return redirect()
             ->route('admin.order.show', ['order' => $order->id])
             ->with('success', 'Заказ был успешно обновлен');
-    }
-      
+    }    
 }

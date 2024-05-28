@@ -130,4 +130,10 @@ class Product extends Model {
         $query->orderBy('relevance', 'desc');
         return $query;
     }
+
+    // Для связи с таблицей размеров
+    public function sizes()
+    {
+        return $this->belongsToMany(Size::class);
+    }
 }

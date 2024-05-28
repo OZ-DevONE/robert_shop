@@ -50,6 +50,38 @@
                 @endforeach
             </select>
         </div>
+
+        <h3 class="mb-3">Состав заказа</h3>
+        <table class="table table-bordered">
+            <tr>
+                <th>№</th>
+                <th>Наименование</th>
+                <th>Размер</th>
+                <th>Цена</th>
+                <th>Кол-во</th>
+                <th>Стоимость</th>
+            </tr>
+            @foreach($order->items as $item)
+                <tr>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $item->name }}</td>
+                    <td>
+                        <select name="sizes[{{ $item->id }}]" class="form-control">
+                            <option value="">Не указан</option>
+                            @foreach($item->product->sizes as $size)
+                                <option value="{{ $size->id }}" {{ $item->sizes->contains($size->id) ? 'selected' : '' }}>
+                                    {{ $size->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </td>
+                    <td>{{ number_format($item->price, 2, '.', '') }}</td>
+                    <td>{{ $item->quantity }}</td>
+                    <td>{{ number_format($item->cost, 2, '.', '') }}</td>
+                </tr>
+            @endforeach
+        </table>
+
         <div class="form-group">
             <button type="submit" class="btn btn-success">Сохранить</button>
         </div>
