@@ -56,4 +56,28 @@
             </form>
         </div>
     </div>
+    
+    <div class="row mt-4">
+        <div class="col-12">
+            <h3>Отзывы</h3>
+            @foreach($reviews as $review)
+                <div class="mb-3">
+                    <strong>{{ $review->user->name }}</strong>
+                    <span class="badge badge-secondary">{{ $review->rating }}/5</span>
+                    <p>{{ $review->content }}</p>
+                    <a href="{{ route('admin.review.edit', ['review' => $review->id]) }}" class="btn btn-sm btn-primary">Изменить</a>
+                    <form action="{{ route('admin.review.delete', ['review' => $review->id]) }}" method="post" class="d-inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-sm btn-danger">Удалить</button>
+                    </form>
+                </div>
+            @endforeach
+
+            <!-- Пагинация -->
+            <div class="d-flex justify-content-center">
+                {{ $reviews->links() }}
+            </div>
+        </div>
+    </div>
 @endsection

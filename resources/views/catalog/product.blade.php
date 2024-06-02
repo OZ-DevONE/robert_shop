@@ -59,6 +59,62 @@
                         <p class="mt-4 mb-0">{{ $product->content }}</p>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-12 mt-4">
+                        <h3>Отзывы</h3>
+                        @foreach($reviews as $review)
+                            <div class="mb-3">
+                                <strong>{{ $review->user->name }}</strong>
+                                <span class="badge badge-secondary">{{ $review->rating }}/5</span>
+                                <p>{{ $review->content }}</p>
+                                @can('update', $review)
+                                    <a href="{{ route('review.edit', ['review' => $review->id]) }}" class="btn btn-sm btn-primary">Изменить</a>
+                                @endcan
+                                @can('delete', $review)
+                                    <form action="{{ route('review.delete', ['review' => $review->id]) }}" method="post" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger">Удалить</button>
+                                    </form>
+                                @endcan
+                            </div>
+                        @endforeach
+
+                        <!-- Пагинация -->
+                        <div class="d-flex justify-content-center">
+                            {{ $reviews->links() }}
+                        </div>
+                    </div>
+                </div>
+                @auth
+                    @if (Auth::user()->orders()->whereHas('items', function($query) use ($product) {
+                        $query->where('product_id', $product->id);
+                    })->exists())
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <h3>Оставить отзыв</h3>
+                                <form action="{{ route('catalog.addReview', ['product' => $product->id]) }}" method="post">
+                                    @csrf
+                                    <div class="form-group">
+                                        <label for="content">Отзыв</label>
+                                        <textarea name="content" id="content" rows="5" class="form-control"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="rating">Рейтинг</label>
+                                        <select name="rating" id="rating" class="form-control">
+                                            @for($i = 1; $i <= 5; $i++)
+                                                <option value="{{ $i }}">{{ $i }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Отправить</button>
+                                </form>
+                            </div>
+                        </div>
+                    @endif
+                @else
+                    <p>Только авторизованные пользователи, которые купили этот товар, могут оставлять отзывы.</p>
+                @endauth
             </div>
             <div class="card-footer">
                 <div class="row">
@@ -75,7 +131,6 @@
                         Бренд:
                         <a href="{{ route('catalog.brand', ['brand' => $product->brand->slug]) }}">
                             {{ $product->brand->name }}
-                        </a>
                         @endisset
                     </div>
                 </div>

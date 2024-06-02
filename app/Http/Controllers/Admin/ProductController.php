@@ -89,8 +89,10 @@ class ProductController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function show(Product $product) {
-        return view('admin.product.show', compact('product'));
+        $reviews = $product->reviews()->orderBy('created_at', 'desc')->paginate(5);
+        return view('admin.product.show', compact('product', 'reviews'));
     }
+    
 
     /**
      * Показывает форму для редактирования товара

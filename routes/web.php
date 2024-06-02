@@ -23,6 +23,15 @@ Route::get('/', 'IndexController')->name('index');
  */
 Route::get('/page/{page:slug}', 'PageController')->name('page.show');
 
+
+Route::post('/product/{product}/addReview', 'CatalogController@addReview')
+    ->name('catalog.addReview');
+Route::get('/review/{review}/edit', 'CatalogController@editReviewForm')
+    ->name('review.edit');
+Route::post('/review/{review}/edit', 'CatalogController@editReview')
+    ->name('review.update');
+Route::delete('/review/{review}/delete', 'CatalogController@deleteReview')
+    ->name('review.delete');
 /*
  * Каталог товаров: категория, бренд и товар
  */
@@ -151,4 +160,9 @@ Route::group([
     // удаление изображения в wysiwyg-редакторе
     Route::delete('page/remove/image', 'PageController@removeImage')
         ->name('page.remove.image');
+
+    // Маршруты для работы с отзывами
+    Route::get('review/{review}/edit', 'ReviewController@edit')->name('review.edit');
+    Route::post('review/{review}/edit', 'ReviewController@update')->name('review.update');
+    Route::delete('review/{review}/delete', 'ReviewController@destroy')->name('review.delete');
 });
