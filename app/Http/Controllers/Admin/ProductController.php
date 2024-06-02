@@ -68,11 +68,19 @@ class ProductController extends Controller {
         ]);
         $data = $request->all();
         $data['image'] = $this->imageSaver->upload($request, null, 'product');
+        
+        // Создаем товар
         $product = Product::create($data);
+        
+        // Сохраняем размеры, если они были выбраны
+        if ($request->has('sizes')) {
+            $product->sizes()->sync($request->sizes);
+        }
+    
         return redirect()
             ->route('admin.product.show', ['product' => $product->id])
             ->with('success', 'Новый товар успешно создан');
-    }
+    }    
 
     /**
      * Показывает страницу товара
@@ -137,7 +145,7 @@ class ProductController extends Controller {
         $this->imageSaver->remove($product, 'product');
         $product->delete();
         return redirect()
-            ->route('admin.catalog.index')
+            ->route('admin.product.index')
             ->with('success', 'Товар каталога успешно удален');
     }
 }
