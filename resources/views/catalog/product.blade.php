@@ -1,3 +1,5 @@
+<!-- resources/views/catalog/product.blade.php -->
+
 @extends('layout.site')
 
 @section('content')
@@ -67,6 +69,7 @@
                                 <strong>{{ $review->user->name }}</strong>
                                 <span class="badge badge-secondary">{{ $review->rating }}/5</span>
                                 <p>{{ $review->content }}</p>
+                                <p class="text-muted">Оставлено: {{ $review->created_at->format('d.m.Y H:i') }}</p>
                                 @can('update', $review)
                                     <a href="{{ route('review.edit', ['review' => $review->id]) }}" class="btn btn-sm btn-primary">Изменить</a>
                                 @endcan

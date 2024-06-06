@@ -113,5 +113,5 @@ class OrderController extends Controller {
         return redirect()
             ->route('admin.order.show', ['order' => $order->id])
             ->with('success', 'Заказ был успешно обновлен');
-    }    
+    }  
 }

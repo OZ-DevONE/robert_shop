@@ -1,3 +1,5 @@
+<!-- resources/views/mail/orders/shipped.blade.php -->
+
 @component('mail::message')
 # Ваш заказ отправлен
 
@@ -13,12 +15,12 @@
 @endcomponent
 
 @component('mail::table')
-| Наименование       | Цена       | Кол-во     | Стоимость  |
-| :----------------- |:----------:|:----------:| ----------:|
+| Наименование       | Размер         | Цена       | Кол-во     | Стоимость  |
+| :----------------- |:--------------:|:----------:|:----------:| ----------:|
 @foreach ($order->items as $item)
-| {{ $item->name }}  | {{ number_format($item->price, 2, '.', '') }} | {{ $item->quantity }} | {{ number_format($item->cost, 2, '.', '') }} |
+| {{ $item->name }}  | {{ $item->sizes->pluck('name')->join(', ') }} | {{ number_format($item->price, 2, '.', '') }} | {{ $item->quantity }} | {{ number_format($item->cost, 2, '.', '') }} |
 @endforeach
-| **Итого**          |            |            | **{{ number_format($order->amount, 2, '.', '') }}** |
+| **Итого**          |                |            |            | **{{ number_format($order->amount, 2, '.', '') }}** |
 @endcomponent
 
 @component('mail::button', ['url' => url('/user/order/' . $order->id)])
